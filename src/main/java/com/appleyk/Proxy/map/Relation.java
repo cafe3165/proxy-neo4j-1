@@ -138,6 +138,8 @@ public class Relation {
 		// 底层设备生成 返回一个运行时对象
 		AirCondition gree = (AirCondition) generate(Gree.class.getName());
 		AirCondition panasonic = (AirCondition) generate(Panasonic.class.getName());
+		AirCondition og=gree;
+		
 ////
 //		Light midea = (Light) generate(Midea.class.getName());
 //		Light opple = (Light) generate(Opple.class.getName());
@@ -179,13 +181,13 @@ public class Relation {
 		//列出运行时的空调对应的底层空调
 		acs.list();
 		List<String> al=acs.getList();
-		System.out.println(al.size());
-		System.out.println(al.get(0));
-		System.out.println(idmaps.get(al.get(0)));
-		System.out.println(idObjmaps);
-		System.out.println(oList);
-		System.out.println(gree);
-		System.out.println(idObjmaps.get(idmaps.get(al.get(0))));
+//		System.out.println(al.size());
+//		System.out.println(al.get(0));
+//		System.out.println(idmaps.get(al.get(0)));
+//		System.out.println(idObjmaps);
+//		System.out.println(oList);
+//		System.out.println(gree);
+//		System.out.println(idObjmaps.get(idmaps.get(al.get(0))));
 		
 		
 		
