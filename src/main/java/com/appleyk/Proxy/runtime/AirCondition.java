@@ -14,5 +14,7 @@ public interface AirCondition {
 	
 	void setID(String ID);
 	String getID();
+	
+	
     
 }

@@ -46,4 +46,9 @@ public class AirConditionImpl implements AirCondition {
 		// TODO Auto-generated method stub
 		return ID;
 	}
+	
+	public AirConditionImpl getAirConditionImpl() {
+		return this;
+	}
+	
 }

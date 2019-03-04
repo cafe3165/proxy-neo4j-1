@@ -152,6 +152,7 @@ public class Relation {
 		gree.cool();
 		gree.setID("A1");
 		
+		
 		idObjmaps.put(String.valueOf(gree.hashCode()),gree);
 		idmaps.put(gree.getID(), String.valueOf(gree.hashCode()));
 		oList.add(gree);
@@ -160,7 +161,6 @@ public class Relation {
 		idObjmaps.put(String.valueOf(panasonic.hashCode()),panasonic);
 		idmaps.put(panasonic.getID(),String.valueOf(panasonic.hashCode()));
 		oList.add(panasonic);
-		
 		
 		for(String kString:idObjmaps.keySet()) {
 			Object o=idObjmaps.get(kString);
@@ -173,13 +173,24 @@ public class Relation {
 		//运行时空调对象集合，有添加空调的方法addlist和列出运行时空调的方法list
 		AirConditioners acs = new AirConditioners();
 		//遍历运行时对象标识与底层设备id的映射，添加运行时设备对应的底层设备id
-		for(Map.Entry<String, String> mEntry :idmaps.entrySet()) {
+		for(Map.Entry<String, String> mEntry :idmaps.entrySet()) {		
 			acs.addlist(mEntry.getKey());
 		}
 		//列出运行时的空调对应的底层空调
 		acs.list();
+		List<String> al=acs.getList();
+		System.out.println(al.size());
+		System.out.println(al.get(0));
+		System.out.println(idmaps.get(al.get(0)));
+		System.out.println(idObjmaps);
+		System.out.println(oList);
+		System.out.println(gree);
+		System.out.println(idObjmaps.get(idmaps.get(al.get(0))));
 		
-
+		
+		
+		
+		
 //		acs.addlist(panasonic);
 //		List<Object> aList=acs.list();
 //		System.out.println(aList.get(0));
