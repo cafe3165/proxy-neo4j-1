@@ -137,8 +137,10 @@ public class Relation {
 		
 		// 底层设备生成 返回一个运行时对象
 		AirCondition gree = (AirCondition) generate(Gree.class.getName());
+//		System.out.println("9999");
+		System.out.println(gree.hashCode()+"***");
+		System.out.println(objMaps.get(gree).hashCode()+"----");
 		AirCondition panasonic = (AirCondition) generate(Panasonic.class.getName());
-		AirCondition og=gree;
 		
 ////
 //		Light midea = (Light) generate(Midea.class.getName());
@@ -166,7 +168,8 @@ public class Relation {
 		
 		for(String kString:idObjmaps.keySet()) {
 			Object o=idObjmaps.get(kString);
-			System.out.println(o.hashCode());
+			System.out.println(o.hashCode()+"++++");
+			System.out.println(kString+"////");
 		}
 //		for(String iString:idmaps.keySet()) {
 //			String s=idmaps.get(iString);
@@ -227,6 +230,7 @@ public class Relation {
 	private static Object generate(String device) throws Exception {
 		// 生成底层设备对象
 		Object deviceObj = Class.forName(device).newInstance();
+		System.out.println(deviceObj);
 		// 通过类映射关系 获取到底层设备 对应的 运行时类
 		for (String deviceType : classMaps.keySet()) {
 
@@ -258,14 +262,18 @@ public class Relation {
 				type.set(runtimeObj, deviceType);
 
 				System.out.println(runtimeObj);
+				System.out.println(runtimeObj.hashCode());
 				// 生成运行时对象的代理对象
 				Object proxyObj = ProxyUtils.getProxy(runtimeObj);
+				
 
 				// 将运行时对象代理与底层设备对象放入objMaps
 				objMaps.put(proxyObj, deviceObj);
+//				System.out.println(proxyObj);
 				return proxyObj;
 			}
 		}
+//		return deviceObj;
 		return null;
 	}
 

@@ -58,6 +58,7 @@ public class RuntimeHandler implements InvocationHandler {
 		String deviceTypeName = (String) type.get(obj);
 
 		// 运行时对象方法调用 映射到 底层设备的api
+		Object o=null;
 		for (String k : Relation.apiMaps.keySet()) {
 //			System.out.println(method.getDeclaringClass().getName());
 			if (k.equals(method.getDeclaringClass().getName() + "." + method.getName())) {
@@ -77,14 +78,18 @@ public class RuntimeHandler implements InvocationHandler {
 
 						// 通过运行时对象代理得到底层设备对象
 						Object deviceObject = Relation.objMaps.get(proxy);
+//						o=deviceObject;
+//						System.out.println(deviceObject);
+//						System.out.println(o);
 						// 调用底层设备对象
+						
 						return deviceMethod.invoke(deviceObject, args);
 					}
 				}
 			}
 		}
 
-		return null;
+		return o;
 	}
 	
 	public static void write(Object o,String MName) throws IOException {
