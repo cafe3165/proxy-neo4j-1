@@ -15,6 +15,12 @@ public interface AirCondition {
 	void setID(String ID);
 	String getID();
 	
+	void setLName(String LName);
+	String getLName();
+	
+	void setDName(String DName);
+	String getDName();
+	
 	
     
 }

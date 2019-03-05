@@ -10,7 +10,25 @@ public class Panasonic {
 
 	private float Temperature;
 	private String id;
-	
+	private String location;
+	private String deviceName;
+    
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getDeviceName() {
+		return deviceName;
+	}
+
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
+
     public String getId() {
 		return id;
 	}

@@ -1,6 +1,6 @@
 package com.appleyk.Proxy.virtualObejct;
 
-public class AirconditionerReduceTemperature {
+public class AcReduceT {
 	private String ServiceId;
 	private String DeviceId;
 	private String RutimeDeviceId;

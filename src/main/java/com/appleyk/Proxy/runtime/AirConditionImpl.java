@@ -12,6 +12,8 @@ public class AirConditionImpl implements AirCondition {
     private String type;
     private float Temperature ;
     private String ID;
+    private String locationName;
+	private String deviceName;
 
     @Override
     public void cool() {
@@ -46,9 +48,35 @@ public class AirConditionImpl implements AirCondition {
 		// TODO Auto-generated method stub
 		return ID;
 	}
-	
-	public AirConditionImpl getAirConditionImpl() {
-		return this;
+
+
+	@Override
+	public void setLName(String LName) {
+		// TODO Auto-generated method stub
+		locationName=LName;
 	}
+
+
+	@Override
+	public String getLName() {
+		// TODO Auto-generated method stub
+		return locationName;
+	}
+
+
+	@Override
+	public void setDName(String DName) {
+		// TODO Auto-generated method stub
+		deviceName=DName;
+	}
+
+
+	@Override
+	public String getDName() {
+		// TODO Auto-generated method stub
+		return deviceName;
+	}
+	
+	
 	
 }

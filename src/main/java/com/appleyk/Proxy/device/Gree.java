@@ -10,7 +10,25 @@ public class Gree {
 	
 	private float Temperature;
 	private String id;
+	private String locationName;
+	private String deviceName;
     
+	public String getLocation() {
+		return locationName;
+	}
+
+	public void setLocation(String location) {
+		this.locationName = location;
+	}
+
+	public String getDeviceName() {
+		return deviceName;
+	}
+
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
+
 	public String getId() {
 		return id;
 	}
