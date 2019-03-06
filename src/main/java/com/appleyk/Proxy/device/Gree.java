@@ -8,7 +8,7 @@ package com.appleyk.Proxy.device;
  **/
 public class Gree {
 	
-	private float Temperature;
+	private double Temperature;
 	private String id;
 	private String locationName;
 	private String deviceName;
@@ -43,11 +43,11 @@ public class Gree {
         System.out.println(Temperature);
     }
  
-	public float getTemperature() {
+	public double getTemperature() {
 		return Temperature;
 	}
 
-	public void setTemperature(float t) {
+	public void setTemperature(double t) {
 		Temperature = t;
 	}
 	

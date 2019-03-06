@@ -43,14 +43,14 @@ public class Relation {
 
 	// 底层设备对象与运行时对象之间的映射 k - 运行时对象 v - 底层设备对象
 	public static Map<Object, Object> objMaps = new HashMap<>();
-	
+
 	// 运行时对象标识与运行时对象的映射
 	public static Map<String, Object> idObjmaps = new HashMap<>();
-	
+
 	// 运行时对象标识与底层设备id的映射
 	public static Map<String, String> idmaps = new HashMap<>();
-	
-	//服务id与设备id的映射
+
+	// 服务id与设备id的映射
 	public static Map<String, String> SerDevMaps = new HashMap<>();
 
 	/**
@@ -84,11 +84,11 @@ public class Relation {
 		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("cool").getName(),
 				Arrays.asList(new String[] { Gree.class.getName() + "." + Gree.class.getMethod("cool").getName(),
 						Panasonic.class.getName() + "." + Panasonic.class.getMethod("down").getName() }));
-		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("setT", float.class).getName(),
+		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("setT", double.class).getName(),
 				Arrays.asList(new String[] {
-						Gree.class.getName() + "." + Gree.class.getMethod("setTemperature", float.class).getName(),
+						Gree.class.getName() + "." + Gree.class.getMethod("setTemperature", double.class).getName(),
 						Panasonic.class.getName() + "."
-								+ Panasonic.class.getMethod("setTemperature", float.class).getName() }));
+								+ Panasonic.class.getMethod("setTemperature", double.class).getName() }));
 
 		// 1.2空调的设置、获取id方法
 		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("setID", String.class).getName(),
@@ -160,19 +160,26 @@ public class Relation {
 		acs.list();
 //		String ServiceId, String DeviceId, String RutimeDeviceId, String DName,
 //		String LName, String CType, String Effect, String Status, double SValue, Object obj
-//		System.out.println(gree.hashCode());
-//		System.out.println(findUnderid(gree.hashCode()));
-		String udId = findUnderid(gree.hashCode());
+		String ServiceId = "S11";
+		String DeviceId = findUnderid(gree.hashCode());
+		String RutimeDeviceId = String.valueOf(gree.hashCode());
+		String DName = classMaps.get(objMaps.get(gree).getClass().getName());
+		String LName = "bedroom";
+//		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
+		String CType="Temperature";
+		String Effect = "Reduce";
+		String Status = "Off";
+		double SValue =22.0;
 		AcReduceT coolService = new AcReduceT();
-		AcReduceT coolS = (AcReduceT) initService("S11", udId, String.valueOf(gree.hashCode()), "AirCondition",
-				"bedroom", "Temperature", "Reduce", "Off", 22.0, coolService);
+		AcReduceT coolS = (AcReduceT) initService(ServiceId, DeviceId, RutimeDeviceId, DName, LName, CType,
+				Effect, Status,SValue, coolService);
 
-		System.out.println(coolS.getCType());
+		coolS.doService();
 		
+		System.out.println(coolS.getSValue());
 		SerDevMaps.put(coolS.getServiceId(), coolS.getRutimeDeviceId());
 		System.out.println(SerDevMaps);
-		
-		
+
 	}
 
 	/**
@@ -225,7 +232,6 @@ public class Relation {
 				return proxyObj;
 			}
 		}
-//		return deviceObj;
 		return null;
 	}
 
@@ -234,10 +240,7 @@ public class Relation {
 	 * 
 	 * @param args
 	 */
-//	public static void main(String[] args) throws Exception {
-//		config();
-//		generateDeviceAndRuntime();
-//	}
+
 
 	public static void main(String[] args) throws Exception {
 //		System.out.println("hello");
@@ -251,15 +254,13 @@ public class Relation {
 		Object dObject = null;
 		for (Object o : objMaps.keySet()) {
 			if (objMaps.get(o).hashCode() == p.hashCode()) {
-//				System.out.println(o.hashCode());
 				dObject = o;
 			}
 		}
 		return dObject;
-
 	}
 
-	// 根据运行时对象找底层设备对象
+	// 根据运行时对象id找底层设备对象id
 	public static String findUnderid(int p) {
 		String iString = String.valueOf(p);
 		String d = "";
@@ -291,4 +292,14 @@ public class Relation {
 		return obj;
 
 	}
+	
+	public static String StrPackName(String s) {
+		String rString="";
+		
+		
+		
+		return s;
+		
+	}
+	
 }

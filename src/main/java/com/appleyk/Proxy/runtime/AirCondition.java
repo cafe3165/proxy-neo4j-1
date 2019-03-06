@@ -9,8 +9,8 @@ package com.appleyk.Proxy.runtime;
 public interface AirCondition {
     void cool();
     
-	void setT(float temperature);
-	float getT();
+	void setT(double temperature);
+	double getT();
 	
 	void setID(String ID);
 	String getID();

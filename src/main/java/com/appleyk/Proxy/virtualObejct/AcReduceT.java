@@ -66,5 +66,13 @@ public class AcReduceT {
 		SValue = sValue;
 	}
 	
+	public void doService() {
+		SValue-=0.5;
+		
+		
+		
+		
+	}
+	
 
 }

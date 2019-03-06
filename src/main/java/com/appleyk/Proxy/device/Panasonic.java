@@ -8,7 +8,7 @@ package com.appleyk.Proxy.device;
  **/
 public class Panasonic {
 
-	private float Temperature;
+	private double Temperature;
 	private String id;
 	private String location;
 	private String deviceName;
@@ -45,11 +45,11 @@ public class Panasonic {
     }
     
    
-	public float getTemperature() {
+	public double getTemperature() {
 		return Temperature;
 	}
 
-	public void setTemperature(float t) {
+	public void setTemperature(double t) {
 		Temperature = t;
 	}
 }
