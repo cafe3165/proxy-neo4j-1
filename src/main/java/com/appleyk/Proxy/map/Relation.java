@@ -158,6 +158,7 @@ public class Relation {
 		}
 		// 列出运行时的空调对应的底层空调
 		acs.list();
+		
 //		String ServiceId, String DeviceId, String RutimeDeviceId, String DName,
 //		String LName, String CType, String Effect, String Status, double SValue, Object obj
 		String ServiceId = "S11";
@@ -170,6 +171,7 @@ public class Relation {
 		String Effect = "Reduce";
 		String Status = "Off";
 		double SValue =22.0;
+		
 		AcReduceT coolService = new AcReduceT();
 		AcReduceT coolS = (AcReduceT) initService(ServiceId, DeviceId, RutimeDeviceId, DName, LName, CType,
 				Effect, Status,SValue, coolService);
