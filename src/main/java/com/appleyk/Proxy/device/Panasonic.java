@@ -12,7 +12,16 @@ public class Panasonic {
 	private String id;
 	private String location;
 	private String deviceName;
+	private String status;
     
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getLocation() {
 		return location;
 	}
@@ -42,6 +51,7 @@ public class Panasonic {
 	public void down() {
     	Temperature-=0.5;
         System.out.println("松下空调降温");
+        System.out.println(Temperature);
     }
     
    

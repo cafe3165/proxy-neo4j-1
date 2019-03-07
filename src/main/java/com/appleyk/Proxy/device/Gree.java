@@ -12,6 +12,7 @@ public class Gree {
 	private String id;
 	private String locationName;
 	private String deviceName;
+	private String status;
     
 	public String getLocation() {
 		return locationName;
@@ -50,6 +51,17 @@ public class Gree {
 	public void setTemperature(double t) {
 		Temperature = t;
 	}
+
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	
 	
 }

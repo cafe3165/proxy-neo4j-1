@@ -109,7 +109,18 @@ public class Relation {
 		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("getLName").getName(),
 				Arrays.asList(new String[] { Gree.class.getName() + "." + Gree.class.getMethod("getLocation").getName(),
 						Panasonic.class.getName() + "." + Panasonic.class.getMethod("getLocation").getName() }));
-
+//		1.4空调的状态设置获取方法
+		apiMaps.put(
+				AirCondition.class.getName() + "." + AirCondition.class.getMethod("setStatus", String.class).getName(),
+				Arrays.asList(new String[] {
+						Gree.class.getName() + "." + Gree.class.getMethod("setStatus", String.class).getName(),
+						Panasonic.class.getName() + "."
+								+ Panasonic.class.getMethod("setStatus", String.class).getName() }));
+		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("getStatus").getName(),
+				Arrays.asList(new String[] { Gree.class.getName() + "." + Gree.class.getMethod("getStatus").getName(),
+						Panasonic.class.getName() + "." + Panasonic.class.getMethod("getStatus").getName() }));
+		
+	
 	}
 
 //	public static <T> 
@@ -138,10 +149,12 @@ public class Relation {
 		System.out.println(ndAirCondition.getLName());
 		idObjmaps.put(String.valueOf(gree.hashCode()), objMaps.get(gree));
 		idmaps.put(gree.getID(), String.valueOf(gree.hashCode()));
-
 		oList.add(objMaps.get(gree));
+
 		panasonic.cool();
 		panasonic.setID("A2");
+		panasonic.setLName("sittingroom");
+		panasonic.setT(20);
 		idObjmaps.put(String.valueOf(panasonic.hashCode()), objMaps.get(panasonic));
 		idmaps.put(panasonic.getID(), String.valueOf(panasonic.hashCode()));
 		oList.add(objMaps.get(panasonic));
@@ -158,28 +171,47 @@ public class Relation {
 		}
 		// 列出运行时的空调对应的底层空调
 		acs.list();
-		
-//		String ServiceId, String DeviceId, String RutimeDeviceId, String DName,
-//		String LName, String CType, String Effect, String Status, double SValue, Object obj
+
 		String ServiceId = "S11";
 		String DeviceId = findUnderid(gree.hashCode());
 		String RutimeDeviceId = String.valueOf(gree.hashCode());
-		String DName = classMaps.get(objMaps.get(gree).getClass().getName());
-		String LName = "bedroom";
-//		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
-		String CType="Temperature";
+//		String DName = classMaps.get(objMaps.get(gree).getClass().getName());
+		String DName = "Gree";
+		String CType = "Temperature";
 		String Effect = "Reduce";
 		String Status = "Off";
-		double SValue =22.0;
-		
-		AcReduceT coolService = new AcReduceT();
-		AcReduceT coolS = (AcReduceT) initService(ServiceId, DeviceId, RutimeDeviceId, DName, LName, CType,
-				Effect, Status,SValue, coolService);
+//		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
+		String ServiceId2 = "S21";
+		String DeviceId2 = findUnderid(panasonic.hashCode());
+		String RutimeDeviceId2 = String.valueOf(panasonic.hashCode());
+		String DName2 = "Gree";
+		String CType2 = "Temperature";
+		String Effect2 = "Reduce";
+		String Status2 = "Off";
 
-		coolS.doService();
+		AcReduceT coolService = new AcReduceT();
+		AcReduceT coolS = (AcReduceT) initService(ServiceId, DeviceId, RutimeDeviceId, DName, CType, Effect, Status,
+				coolService);
+
+		AcReduceT coolService2 = new AcReduceT();
+		AcReduceT coolS2 = (AcReduceT) initService(ServiceId2, DeviceId2, RutimeDeviceId2, DName2, CType2, Effect2, Status2,
+				coolService2);
 		
+		
+//		coolS.doService();
+
 		System.out.println(coolS.getSValue());
 		SerDevMaps.put(coolS.getServiceId(), coolS.getRutimeDeviceId());
+		
+		System.out.println(coolS2.getSValue());
+		SerDevMaps.put(coolS2.getServiceId(), coolS2.getRutimeDeviceId());
+
+		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
+
+		SD(ndAirCondition, coolS);
+		SD(panasonic, coolS2);
+		System.out.println(coolS.getLName()+" "+coolS2.getLName());
+
 		System.out.println(SerDevMaps);
 
 	}
@@ -243,7 +275,6 @@ public class Relation {
 	 * @param args
 	 */
 
-
 	public static void main(String[] args) throws Exception {
 //		System.out.println("hello");
 		config();
@@ -278,30 +309,46 @@ public class Relation {
 	}
 
 	public static Object initService(String ServiceId, String DeviceId, String RutimeDeviceId, String DName,
-			String LName, String CType, String Effect, String Status, double SValue, Object obj) {
+			String CType, String Effect, String Status, Object obj) {
 		AcReduceT objAcReduceT = new AcReduceT();
 		objAcReduceT.setServiceId(ServiceId);
 		objAcReduceT.setDeviceId(DeviceId);
 		objAcReduceT.setRutimeDeviceId(RutimeDeviceId);
 		objAcReduceT.setDName(DName);
-		objAcReduceT.setLName(LName);
 		objAcReduceT.setCType(CType);
 		objAcReduceT.setEffect(Effect);
 		objAcReduceT.setStatus(Status);
-		objAcReduceT.setSValue(SValue);
+		objAcReduceT.setSValue(0.0);
 
 		obj = objAcReduceT;
 		return obj;
 
 	}
-	
-	public static String StrPackName(String s) {
-		String rString="";
-		
-		
-		
-		return s;
-		
+
+	public static void SD(Object d, Object s) {
+//		Field[] fields = d.getClass().getDeclaredFields();
+//		List<String> atrrList = new ArrayList<>();
+
+//		System.out.println(d.getClass().getName());
+//		for (Field field : fields) {
+//			String temp = field.toString();
+//			String[] fStrings = temp.split("\\.");
+//			if (fStrings.length == 6) {
+//				atrrList.add(fStrings[5]);
+//			}
+//
+//			else {
+//				atrrList.add(fStrings[7]);
+//			}
+//
+//		}
+//		System.out.println(atrrList);
+
+		AcReduceT coolS = (AcReduceT) s;
+		AirCondition ac = (AirCondition) d;
+		coolS.setLName(ac.getLName());
+//		System.out.println(coolS.getLName());
+
 	}
-	
+
 }

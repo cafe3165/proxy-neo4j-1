@@ -21,6 +21,8 @@ public interface AirCondition {
 	void setDName(String DName);
 	String getDName();
 	
+	void setStatus(String Status);
+	String getStatus();
 	
     
 }

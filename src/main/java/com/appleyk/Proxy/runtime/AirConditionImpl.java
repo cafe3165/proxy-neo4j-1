@@ -14,6 +14,8 @@ public class AirConditionImpl implements AirCondition {
     private String ID;
     private String locationName;
 	private String deviceName;
+	private String status;
+	
 
     @Override
     public void cool() {
@@ -74,6 +76,20 @@ public class AirConditionImpl implements AirCondition {
 	public String getDName() {
 		// TODO Auto-generated method stub
 		return deviceName;
+	}
+
+
+	@Override
+	public void setStatus(String Status) {
+		// TODO Auto-generated method stub
+		status=Status;
+	}
+
+
+	@Override
+	public String getStatus() {
+		// TODO Auto-generated method stub
+		return status;
 	}
 	
 	
