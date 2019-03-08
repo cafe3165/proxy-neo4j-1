@@ -2,6 +2,8 @@ package com.appleyk.Proxy.map;
 
 import com.appleyk.Proxy.Proxy.ProxyUtils;
 import com.appleyk.Proxy.virtualObejct.AcReduceT;
+import com.appleyk.Proxy.virtualObejct.Services;
+import com.appleyk.node.Service;
 import com.appleyk.Proxy.device.Airconditioner;
 import com.appleyk.Proxy.device.Gree;
 import com.appleyk.Proxy.device.Panasonic;
@@ -201,7 +203,8 @@ public class Relation {
 //		coolS.doService();
 
 		System.out.println(coolS.getSValue());
-		SerDevMaps.put(coolS.getServiceId(), coolS.getRutimeDeviceId());
+		SerDevMaps.
+		put(coolS.getServiceId(), coolS.getRutimeDeviceId());
 		
 		System.out.println(coolS2.getSValue());
 		SerDevMaps.put(coolS2.getServiceId(), coolS2.getRutimeDeviceId());
@@ -210,6 +213,13 @@ public class Relation {
 
 		SD(ndAirCondition, coolS);
 		SD(panasonic, coolS2);
+		
+		Services services=new Services();
+		services.addlist(coolS.getServiceId());
+		services.addlist(coolS2.getServiceId());
+		services.list();
+		
+		
 		System.out.println(coolS.getLName()+" "+coolS2.getLName());
 
 		System.out.println(SerDevMaps);
