@@ -1,6 +1,6 @@
 package com.appleyk.Proxy.virtualObejct;
 
-public class AcIncreaseT implements Service{
+public class AcIncreaseT extends Service{
 	private String ServiceId;
 	private String DeviceId;
 	private String RutimeDeviceId;
@@ -10,114 +10,116 @@ public class AcIncreaseT implements Service{
 	private String Effect;
 	private String Status;
 	private double SValue;
+	
+	
 
-	@Override
 	public String getServiceId() {
-		// TODO Auto-generated method stub
-		return null;
+		return ServiceId;
 	}
 
-	@Override
+
+
 	public void setServiceId(String serviceId) {
-		// TODO Auto-generated method stub
-		
+		ServiceId = serviceId;
 	}
 
-	@Override
+
+
 	public String getDeviceId() {
-		// TODO Auto-generated method stub
-		return null;
+		return DeviceId;
 	}
 
-	@Override
+
+
 	public void setDeviceId(String deviceId) {
-		// TODO Auto-generated method stub
-		
+		DeviceId = deviceId;
 	}
 
-	@Override
+
+
 	public String getRutimeDeviceId() {
-		// TODO Auto-generated method stub
-		return null;
+		return RutimeDeviceId;
 	}
 
-	@Override
+
+
 	public void setRutimeDeviceId(String rutimeDeviceId) {
-		// TODO Auto-generated method stub
-		
+		RutimeDeviceId = rutimeDeviceId;
 	}
 
-	@Override
+
+
 	public String getDName() {
-		// TODO Auto-generated method stub
-		return null;
+		return DName;
 	}
 
-	@Override
+
+
 	public void setDName(String dName) {
-		// TODO Auto-generated method stub
-		
+		DName = dName;
 	}
 
-	@Override
+
+
 	public String getLName() {
-		// TODO Auto-generated method stub
-		return null;
+		return LName;
 	}
 
-	@Override
+
+
 	public void setLName(String lName) {
-		// TODO Auto-generated method stub
-		
+		LName = lName;
 	}
 
-	@Override
+
+
 	public String getCType() {
-		// TODO Auto-generated method stub
-		return null;
+		return CType;
 	}
 
-	@Override
+
+
 	public void setCType(String cType) {
-		// TODO Auto-generated method stub
-		
+		CType = cType;
 	}
 
-	@Override
+
+
 	public String getEffect() {
-		// TODO Auto-generated method stub
-		return null;
+		return Effect;
 	}
 
-	@Override
+
+
 	public void setEffect(String effect) {
-		// TODO Auto-generated method stub
-		
+		Effect = effect;
 	}
 
-	@Override
+
+
 	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+		return Status;
 	}
 
-	@Override
+
+
 	public void setStatus(String status) {
-		// TODO Auto-generated method stub
-		
+		Status = status;
 	}
 
-	@Override
+
+
 	public double getSValue() {
-		// TODO Auto-generated method stub
-		return 0;
+		return SValue;
 	}
 
-	@Override
+
+
 	public void setSValue(double sValue) {
-		// TODO Auto-generated method stub
-		
+		SValue = sValue;
 	}
+
+
 
 	@Override
 	public void doService() {

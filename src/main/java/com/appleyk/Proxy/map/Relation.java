@@ -1,9 +1,10 @@
 package com.appleyk.Proxy.map;
 
 import com.appleyk.Proxy.Proxy.ProxyUtils;
+import com.appleyk.Proxy.virtualObejct.AcIncreaseT;
 import com.appleyk.Proxy.virtualObejct.AcReduceT;
 import com.appleyk.Proxy.virtualObejct.Services;
-import com.appleyk.node.Service;
+import com.appleyk.Proxy.virtualObejct.Service;
 import com.appleyk.Proxy.device.Airconditioner;
 import com.appleyk.Proxy.device.Gree;
 import com.appleyk.Proxy.device.Panasonic;
@@ -121,8 +122,7 @@ public class Relation {
 		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("getStatus").getName(),
 				Arrays.asList(new String[] { Gree.class.getName() + "." + Gree.class.getMethod("getStatus").getName(),
 						Panasonic.class.getName() + "." + Panasonic.class.getMethod("getStatus").getName() }));
-		
-	
+
 	}
 
 //	public static <T> 
@@ -148,6 +148,7 @@ public class Relation {
 		ndAirCondition.setT(100);
 		ndAirCondition.cool();
 		ndAirCondition.setLName("bedroom");
+		ndAirCondition.setStatus("off");
 		System.out.println(ndAirCondition.getLName());
 		idObjmaps.put(String.valueOf(gree.hashCode()), objMaps.get(gree));
 		idmaps.put(gree.getID(), String.valueOf(gree.hashCode()));
@@ -157,6 +158,7 @@ public class Relation {
 		panasonic.setID("A2");
 		panasonic.setLName("sittingroom");
 		panasonic.setT(20);
+		panasonic.setStatus("off");
 		idObjmaps.put(String.valueOf(panasonic.hashCode()), objMaps.get(panasonic));
 		idmaps.put(panasonic.getID(), String.valueOf(panasonic.hashCode()));
 		oList.add(objMaps.get(panasonic));
@@ -177,35 +179,47 @@ public class Relation {
 		String ServiceId = "S11";
 		String DeviceId = findUnderid(gree.hashCode());
 		String RutimeDeviceId = String.valueOf(gree.hashCode());
-//		String DName = classMaps.get(objMaps.get(gree).getClass().getName());
 		String DName = "Gree";
 		String CType = "Temperature";
 		String Effect = "Reduce";
-		String Status = "Off";
-//		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
+//		String Status = "Off";
+
 		String ServiceId2 = "S21";
 		String DeviceId2 = findUnderid(panasonic.hashCode());
 		String RutimeDeviceId2 = String.valueOf(panasonic.hashCode());
-		String DName2 = "Gree";
+		String DName2 = "Panasonic";
 		String CType2 = "Temperature";
 		String Effect2 = "Reduce";
-		String Status2 = "Off";
+//		String Status2 = "Off";
+
+		String ServiceId3 = "S22";
+		String DeviceId3 = findUnderid(panasonic.hashCode());
+		String RutimeDeviceId3 = String.valueOf(panasonic.hashCode());
+		String DName3 = "Panasonic";
+		String CType3 = "Temperature";
+		String Effect3 = "Increase";
+		String Status3 = "Off";
 
 		AcReduceT coolService = new AcReduceT();
-		AcReduceT coolS = (AcReduceT) initService(ServiceId, DeviceId, RutimeDeviceId, DName, CType, Effect, Status,
+		AcReduceT coolS = (AcReduceT) initService(ServiceId, DeviceId, RutimeDeviceId, DName, CType, Effect,
 				coolService);
 
 		AcReduceT coolService2 = new AcReduceT();
-		AcReduceT coolS2 = (AcReduceT) initService(ServiceId2, DeviceId2, RutimeDeviceId2, DName2, CType2, Effect2, Status2,
+		AcReduceT coolS2 = (AcReduceT) initService(ServiceId2, DeviceId2, RutimeDeviceId2, DName2, CType2, Effect2,
 				coolService2);
-		
-		
+
+		Service upService3 = new Service();
+		Service upS3 = (Service) init(ServiceId3, DeviceId3, RutimeDeviceId3, DName3, CType3, Effect3, Status3,
+				upService3);
+
+		System.out.println(upS3.getCType());
+		System.out.println(upS3.getEffect());
+
 //		coolS.doService();
 
 		System.out.println(coolS.getSValue());
-		SerDevMaps.
-		put(coolS.getServiceId(), coolS.getRutimeDeviceId());
-		
+		SerDevMaps.put(coolS.getServiceId(), coolS.getRutimeDeviceId());
+
 		System.out.println(coolS2.getSValue());
 		SerDevMaps.put(coolS2.getServiceId(), coolS2.getRutimeDeviceId());
 
@@ -213,15 +227,14 @@ public class Relation {
 
 		SD(ndAirCondition, coolS);
 		SD(panasonic, coolS2);
-		
-		Services services=new Services();
+
+		Services services = new Services();
 		services.addlist(coolS.getServiceId());
 		services.addlist(coolS2.getServiceId());
 		services.list();
-		
-		
-		System.out.println(coolS.getLName()+" "+coolS2.getLName());
 
+		System.out.println(coolS.getLName() + " " + coolS2.getLName());
+		System.out.println(coolS.getStatus()+" "+coolS2.getStatus());
 		System.out.println(SerDevMaps);
 
 	}
@@ -319,8 +332,25 @@ public class Relation {
 	}
 
 	public static Object initService(String ServiceId, String DeviceId, String RutimeDeviceId, String DName,
-			String CType, String Effect, String Status, Object obj) {
+			String CType, String Effect, Object obj) {
 		AcReduceT objAcReduceT = new AcReduceT();
+		objAcReduceT.setServiceId(ServiceId);
+		objAcReduceT.setDeviceId(DeviceId);
+		objAcReduceT.setRutimeDeviceId(RutimeDeviceId);
+		objAcReduceT.setDName(DName);
+		objAcReduceT.setCType(CType);
+		objAcReduceT.setEffect(Effect);
+//		objAcReduceT.setStatus(Status);
+		objAcReduceT.setSValue(0.0);
+
+		obj = objAcReduceT;
+		return obj;
+
+	}
+
+	public static Object init(String ServiceId, String DeviceId, String RutimeDeviceId, String DName, String CType,
+			String Effect, String Status, Object obj) {
+		Service objAcReduceT = new Service();
 		objAcReduceT.setServiceId(ServiceId);
 		objAcReduceT.setDeviceId(DeviceId);
 		objAcReduceT.setRutimeDeviceId(RutimeDeviceId);
@@ -357,6 +387,7 @@ public class Relation {
 		AcReduceT coolS = (AcReduceT) s;
 		AirCondition ac = (AirCondition) d;
 		coolS.setLName(ac.getLName());
+		coolS.setStatus(ac.getStatus());
 //		System.out.println(coolS.getLName());
 
 	}
