@@ -1,6 +1,6 @@
 package com.appleyk.Proxy.virtualObejct;
 
-public class AcReduceT {
+public class AcReduceT extends Service{
 	private String ServiceId;
 	private String DeviceId;
 	private String RutimeDeviceId;
