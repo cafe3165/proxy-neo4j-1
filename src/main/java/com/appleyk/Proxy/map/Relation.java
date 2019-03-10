@@ -4,6 +4,8 @@ import com.appleyk.Proxy.Proxy.ProxyUtils;
 import com.appleyk.Proxy.virtualObejct.AcIncreaseT;
 import com.appleyk.Proxy.virtualObejct.AcReduceT;
 import com.appleyk.Proxy.virtualObejct.Services;
+import com.appleyk.Proxy.virtualObejct.Location;
+import com.appleyk.Proxy.virtualObejct.Locations;
 import com.appleyk.Proxy.virtualObejct.Service;
 import com.appleyk.Proxy.device.Airconditioner;
 import com.appleyk.Proxy.device.Gree;
@@ -15,7 +17,7 @@ import com.appleyk.Proxy.runtime.AirCleaner;
 import com.appleyk.Proxy.runtime.AirCleanerImpl;
 import com.appleyk.Proxy.runtime.AirCondition;
 import com.appleyk.Proxy.runtime.AirConditionImpl;
-import com.appleyk.Proxy.runtime.AirConditioners;
+import com.appleyk.Proxy.virtualObejct.AirConditioners;
 import com.appleyk.Proxy.runtime.Light;
 import com.appleyk.Proxy.runtime.LightImpl;
 
@@ -50,10 +52,10 @@ public class Relation {
 	// 运行时对象标识与运行时对象的映射
 	public static Map<String, Object> idObjmaps = new HashMap<>();
 
-	// 运行时对象标识与底层设备id的映射
+	// 底层设备id与运行时对象标识的映射
 	public static Map<String, String> idmaps = new HashMap<>();
 
-	// 服务id与设备id的映射
+	// 服务id与运行时设备id的映射
 	public static Map<String, String> SerDevMaps = new HashMap<>();
 
 	/**
@@ -95,9 +97,8 @@ public class Relation {
 		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("getT").getName(),
 				Arrays.asList(new String[] {
 						Gree.class.getName() + "." + Gree.class.getMethod("getTemperature").getName(),
-						Panasonic.class.getName() + "."
-								+ Panasonic.class.getMethod("getTemperature").getName() }));
-		
+						Panasonic.class.getName() + "." + Panasonic.class.getMethod("getTemperature").getName() }));
+
 		// 1.2空调的设置、获取id方法
 		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("setID", String.class).getName(),
 				Arrays.asList(new String[] {
@@ -128,8 +129,18 @@ public class Relation {
 				Arrays.asList(new String[] { Gree.class.getName() + "." + Gree.class.getMethod("getStatus").getName(),
 						Panasonic.class.getName() + "." + Panasonic.class.getMethod("getStatus").getName() }));
 
-		
-	
+//		1.5空调的名字设置获取方法
+		apiMaps.put(
+				AirCondition.class.getName() + "." + AirCondition.class.getMethod("setDName", String.class).getName(),
+				Arrays.asList(new String[] {
+						Gree.class.getName() + "." + Gree.class.getMethod("setDeviceName", String.class).getName(),
+						Panasonic.class.getName() + "."
+								+ Panasonic.class.getMethod("setDeviceName", String.class).getName() }));
+		apiMaps.put(AirCondition.class.getName() + "." + AirCondition.class.getMethod("getDName").getName(),
+				Arrays.asList(new String[] {
+						Gree.class.getName() + "." + Gree.class.getMethod("getDeviceName").getName(),
+						Panasonic.class.getName() + "." + Panasonic.class.getMethod("getDeviceName").getName() }));
+
 	}
 
 //	public static <T> 
@@ -139,8 +150,11 @@ public class Relation {
 	 */
 	public static void generateDeviceAndRuntime() throws Exception {
 
-		List<Object> oList = new ArrayList<Object>();
-		Map<String, Object> serMap=new HashMap<>();
+//		存放服务id与服务对象的映射
+		Map<String, Object> serMap = new HashMap<>();
+		
+//		存放位置id与位置对象的映射
+		Map<String,Object> locationMap=new HashMap<>();
 //		List<HashMap<String, Object>> idObjList = new ArrayList<HashMap<String,Object>>();
 
 		// 底层设备生成 返回一个运行时对象
@@ -149,30 +163,23 @@ public class Relation {
 
 		// 运行时对象调用
 		Object dObject = findUnderDByRuntimeD(objMaps.get(gree));
-
 		AirCondition ndAirCondition = (AirCondition) dObject;
 		ndAirCondition.setID("A0");
+		ndAirCondition.setDName("Gree");
 		ndAirCondition.getID();
 		ndAirCondition.setT(100);
-		ndAirCondition.cool();
 		ndAirCondition.setLName("bedroom");
 		ndAirCondition.setStatus("off");
 		idObjmaps.put(String.valueOf(gree.hashCode()), objMaps.get(gree));
 		idmaps.put(gree.getID(), String.valueOf(gree.hashCode()));
-		oList.add(objMaps.get(gree));
 
-		panasonic.cool();
-		panasonic.setID("A2");
+		panasonic.setID("A1");
+		panasonic.setDName("Panasonic");
 		panasonic.setLName("sittingroom");
 		panasonic.setT(20);
 		panasonic.setStatus("off");
 		idObjmaps.put(String.valueOf(panasonic.hashCode()), objMaps.get(panasonic));
 		idmaps.put(panasonic.getID(), String.valueOf(panasonic.hashCode()));
-		oList.add(objMaps.get(panasonic));
-//		
-//		System.out.println(idmaps);
-//		System.out.println(idObjmaps);
-//		System.out.println(oList);
 
 		// 运行时空调对象集合，有添加空调的方法addlist和列出运行时空调的方法list
 		AirConditioners acs = new AirConditioners();
@@ -181,7 +188,14 @@ public class Relation {
 			acs.addlist(mEntry.getKey());
 		}
 		// 列出运行时的空调对应的底层空调
-		acs.list();
+		List<String> airCList = acs.list();
+//		根据设备id获得所有设备的属性
+		for (String underDeviceId : airCList) {
+			System.out.println("---------------------------");
+			acs.ListProperties(underDeviceId, objMaps, idObjmaps, idmaps);
+			System.out.println("---------------------------");
+
+		}
 
 		String ServiceId = "S11";
 		String DeviceId = findUnderid(gree.hashCode());
@@ -204,49 +218,85 @@ public class Relation {
 		String CType3 = "Temperature";
 		String Effect3 = "Increase";
 
+		String ServiceId4 = "S12";
+		String DeviceId4 = findUnderid(gree.hashCode());
+		String RutimeDeviceId4 = String.valueOf(gree.hashCode());
+		String DName4 = "Gree";
+		String CType4 = "Temperature";
+		String Effect4 = "Assign";
+
 		Service coolService = new Service();
-		Service coolS = (Service) initService(ServiceId, DeviceId, RutimeDeviceId, DName, CType, Effect,
-				coolService);
+		Service coolS = (Service) initService(ServiceId, DeviceId, RutimeDeviceId, DName, CType, Effect, coolService);
 
 		Service coolService2 = new Service();
 		Service coolS2 = (Service) initService(ServiceId2, DeviceId2, RutimeDeviceId2, DName2, CType2, Effect2,
 				coolService2);
 
 		Service upService3 = new Service();
-		Service upS3 = (Service) initService(ServiceId3, DeviceId3, RutimeDeviceId3, DName3, CType3, Effect3, 
+		Service upS3 = (Service) initService(ServiceId3, DeviceId3, RutimeDeviceId3, DName3, CType3, Effect3,
 				upService3);
 
+		Service assService = new Service();
+		Service assS = (Service) initService(ServiceId4, DeviceId4, RutimeDeviceId4, DName4, CType4, Effect4,
+				assService);
 
 		SerDevMaps.put(coolS.getServiceId(), coolS.getRutimeDeviceId());
 		SerDevMaps.put(coolS2.getServiceId(), coolS2.getRutimeDeviceId());
 		SerDevMaps.put(upS3.getServiceId(), upS3.getRutimeDeviceId());
-		
+		SerDevMaps.put(assS.getServiceId(), assS.getRutimeDeviceId());
+
 		serMap.put(coolS.getServiceId(), coolS);
 		serMap.put(coolS2.getServiceId(), coolS2);
 		serMap.put(upS3.getServiceId(), upS3);
+		serMap.put(assS.getServiceId(), assS);
 
-		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
+//		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
 
 		SerMapDev_AirC(ndAirCondition, coolS);
 		SerMapDev_AirC(panasonic, coolS2);
-		SerMapDev_AirC(panasonic,upS3);
-		
-		System.out.println(coolS.getSValue()+" "+coolS2.getSValue()+" "+upS3.getSValue());
+		SerMapDev_AirC(panasonic, upS3);
+		SerMapDev_AirC(ndAirCondition, assS);
 
 		Services services = new Services();
 		services.addlist(SerDevMaps);
-		List<String> SerList=new ArrayList<>();
-		SerList=services.list();
-//		System.out.println(SerDevMaps);
-//		System.out.println(idmaps);
-//		System.out.println(idObjmaps);
-		
-		String SerId="S22";
-		String Value="50";
-//		services.ListProperties(SerId,serMap);
-		services.SetDevProperties(SerId, Value, SerDevMaps,idmaps,idObjmaps);
-		
+		List<String> SerList = new ArrayList<>();
+		SerList = services.list();
 
+		String SerId = "S12";
+		String Value = "50";
+		String SKey = "Temperature";
+		services.SetDevProperties(SerId, Value, SKey, SerDevMaps, idmaps, idObjmaps, objMaps, serMap);
+
+		for(String si:SerList) {
+			System.out.println("---------------------------");
+			services.ListProperties(si, serMap);
+			System.out.println("---------------------------");
+		}
+
+		String SerId2 = "S11";
+		String Value2 = "On";
+		String SKey2 = "Status";
+		services.SetDevProperties(SerId2, Value2, SKey2, SerDevMaps, idmaps, idObjmaps, objMaps, serMap);
+
+		String lName1 = "bedroom";
+		String lId1 = "L1";
+		Location l1 = new Location();
+		
+		String lName2 = "sittingroom";
+		String lId2 = "L2";
+		Location l2 = new Location();
+		l1 = (Location) initLocation(lId1, lName1, airCList, SerList, l1);
+		l2 = (Location) initLocation(lId2, lName2, airCList, SerList, l2);
+		locationMap.put(l1.getLId(), l1);
+		locationMap.put(l2.getLId(), l2);
+
+		Locations ls=new Locations();
+		ls.addlist(l1.getLId());
+		ls.addlist(l2.getLId());
+		ls.list();
+		ls.ListProperties(l1.getLId(), locationMap);
+		
+		
 	}
 
 	/**
@@ -316,7 +366,6 @@ public class Relation {
 
 //根据运行时对象找底层设备对象
 	public static Object findUnderDByRuntimeD(Object p) {
-
 		Object dObject = null;
 		for (Object o : objMaps.keySet()) {
 			if (objMaps.get(o).hashCode() == p.hashCode()) {
@@ -358,7 +407,7 @@ public class Relation {
 	}
 
 	public static void SerMapDev_AirC(Object dev, Object ser) {
-		Service service= (Service) ser;
+		Service service = (Service) ser;
 		AirCondition airc = (AirCondition) dev;
 		service.setLName(airc.getLName());
 		service.setStatus(airc.getStatus());
@@ -380,6 +429,19 @@ public class Relation {
 //
 //		}
 //		System.out.println(atrrList);
+
+	}
+
+	public static Object initLocation(String LId, String LName, List<String> dList, List<String> sList,
+			Object location) {
+		Location tempLocation = (Location) location;
+		tempLocation.setLId(LId);
+		
+		tempLocation.setLName(LName);
+		tempLocation.setdList(dList);
+		tempLocation.setsList(sList);
+
+		return tempLocation;
 
 	}
 
