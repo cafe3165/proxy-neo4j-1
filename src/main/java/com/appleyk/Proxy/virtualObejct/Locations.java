@@ -28,10 +28,10 @@ public class Locations {
 		}
 		
 		Location l=(Location)location;
-		System.out.println(l.getLId());
-		System.out.println(l.getLName());
-		System.out.println(l.getsList());
-		System.out.println(l.getdList());
+		System.out.println("LId: "+l.getLId());
+		System.out.println("LName: "+l.getLName());
+		System.out.println("ServiceList: "+l.getsList());
+		System.out.println("DeviceList: "+l.getdList());
 
 
 	}

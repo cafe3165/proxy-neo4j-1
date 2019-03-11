@@ -21,6 +21,9 @@ import com.appleyk.Proxy.virtualObejct.AirConditioners;
 import com.appleyk.Proxy.runtime.Light;
 import com.appleyk.Proxy.runtime.LightImpl;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -152,9 +155,9 @@ public class Relation {
 
 //		存放服务id与服务对象的映射
 		Map<String, Object> serMap = new HashMap<>();
-		
+
 //		存放位置id与位置对象的映射
-		Map<String,Object> locationMap=new HashMap<>();
+		Map<String, Object> locationMap = new HashMap<>();
 //		List<HashMap<String, Object>> idObjList = new ArrayList<HashMap<String,Object>>();
 
 		// 底层设备生成 返回一个运行时对象
@@ -190,12 +193,12 @@ public class Relation {
 		// 列出运行时的空调对应的底层空调
 		List<String> airCList = acs.list();
 //		根据设备id获得所有设备的属性
-		for (String underDeviceId : airCList) {
-			System.out.println("---------------------------");
-			acs.ListProperties(underDeviceId, objMaps, idObjmaps, idmaps);
-			System.out.println("---------------------------");
-
-		}
+//		for (String underDeviceId : airCList) {
+//			System.out.println("---------------------------");
+//			acs.ListProperties(underDeviceId, objMaps, idObjmaps, idmaps);
+//			System.out.println("---------------------------");
+//
+//		}
 
 		String ServiceId = "S11";
 		String DeviceId = findUnderid(gree.hashCode());
@@ -266,12 +269,12 @@ public class Relation {
 		String Value = "50";
 		String SKey = "Temperature";
 		services.SetDevProperties(SerId, Value, SKey, SerDevMaps, idmaps, idObjmaps, objMaps, serMap);
-
-		for(String si:SerList) {
-			System.out.println("---------------------------");
-			services.ListProperties(si, serMap);
-			System.out.println("---------------------------");
-		}
+//
+//		for (String si : SerList) {
+//			System.out.println("---------------------------");
+//			services.ListProperties(si, serMap);
+//			System.out.println("---------------------------");
+//		}
 
 		String SerId2 = "S11";
 		String Value2 = "On";
@@ -281,22 +284,22 @@ public class Relation {
 		String lName1 = "bedroom";
 		String lId1 = "L1";
 		Location l1 = new Location();
-		
+
 		String lName2 = "sittingroom";
 		String lId2 = "L2";
 		Location l2 = new Location();
-		l1 = (Location) initLocation(lId1, lName1, airCList, SerList, l1);
-		l2 = (Location) initLocation(lId2, lName2, airCList, SerList, l2);
+		l1 = (Location) initLocation(lId1, lName1, SerList, l1);
+		l2 = (Location) initLocation(lId2, lName2, SerList, l2);
 		locationMap.put(l1.getLId(), l1);
 		locationMap.put(l2.getLId(), l2);
 
-		Locations ls=new Locations();
+		Locations ls = new Locations();
 		ls.addlist(l1.getLId());
 		ls.addlist(l2.getLId());
 		ls.list();
 		ls.ListProperties(l1.getLId(), locationMap);
-		
-		
+		ls.ListProperties(l2.getLId(), locationMap);
+
 	}
 
 	/**
@@ -359,7 +362,6 @@ public class Relation {
 	 */
 
 	public static void main(String[] args) throws Exception {
-//		System.out.println("hello");
 		config();
 		generateDeviceAndRuntime();
 	}
@@ -375,7 +377,7 @@ public class Relation {
 		return dObject;
 	}
 
-	// 根据运行时对象id找底层设备对象id
+//  根据运行时对象id找底层设备对象id
 	public static String findUnderid(int p) {
 		String iString = String.valueOf(p);
 		String d = "";
@@ -390,6 +392,7 @@ public class Relation {
 
 	}
 
+//	初始化服务
 	public static Object initService(String ServiceId, String DeviceId, String RutimeDeviceId, String DName,
 			String CType, String Effect, Object obj) {
 		Service ser = new Service();
@@ -406,6 +409,7 @@ public class Relation {
 
 	}
 
+//	从服务所绑定的设备中提取对应属性值
 	public static void SerMapDev_AirC(Object dev, Object ser) {
 		Service service = (Service) ser;
 		AirCondition airc = (AirCondition) dev;
@@ -432,15 +436,44 @@ public class Relation {
 
 	}
 
-	public static Object initLocation(String LId, String LName, List<String> dList, List<String> sList,
+// 	初始化位置
+	public static Object initLocation(String LId, String LName, List<String> sList,
 			Object location) {
+		
+		System.out.println(SerDevMaps);
+		System.out.println(idmaps);
+		AirCondition tempA=null;
+		AirCondition tempB=null;
+//		{null=com.appleyk.Proxy.device.Gree@1b6d3586, null=com.appleyk.Proxy.device.Panasonic@4554617c}
+//		通过底层设备与运行时设备的映射找到底层设备对象underDevice
+		for (Object o : objMaps.keySet()) {
+			tempA=(AirCondition)o;
+			if(tempA.getLName().equals(LName)) {
+				tempB=tempA;
+			}
+		}
+		
+		List<String> DIdList=new ArrayList<>();
+		List<String> SIdList=new ArrayList<>();
+		for(String DId:idmaps.keySet()) {
+			if(tempB.hashCode()==Integer.valueOf(idmaps.get(DId))) {
+				DIdList.add(DId);
+			}
+		}
+		
+		for(String SId:SerDevMaps.keySet()) {
+			if(tempB.hashCode()==Integer.valueOf(SerDevMaps.get(SId))) {
+				SIdList.add(SId);
+			}
+		}
+		
 		Location tempLocation = (Location) location;
 		tempLocation.setLId(LId);
-		
-		tempLocation.setLName(LName);
-		tempLocation.setdList(dList);
-		tempLocation.setsList(sList);
 
+		tempLocation.setLName(LName);
+		tempLocation.setdList(DIdList);
+		tempLocation.setsList(SIdList);
+		
 		return tempLocation;
 
 	}
