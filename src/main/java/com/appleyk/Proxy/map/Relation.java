@@ -4,6 +4,10 @@ import com.appleyk.Proxy.Proxy.ProxyUtils;
 import com.appleyk.Proxy.virtualObejct.AcIncreaseT;
 import com.appleyk.Proxy.virtualObejct.AcReduceT;
 import com.appleyk.Proxy.virtualObejct.Services;
+import com.appleyk.Proxy.virtualObejct.User;
+import com.appleyk.Proxy.virtualObejct.Users;
+import com.appleyk.Proxy.virtualObejct.Context;
+
 import com.appleyk.Proxy.virtualObejct.Location;
 import com.appleyk.Proxy.virtualObejct.Locations;
 import com.appleyk.Proxy.virtualObejct.Service;
@@ -158,6 +162,19 @@ public class Relation {
 
 //		存放位置id与位置对象的映射
 		Map<String, Object> locationMap = new HashMap<>();
+
+//		存放位置id与位置名的映射
+		Map<String, String> locIdNameMap = new HashMap<>();
+
+//		存放用戶id与用戶对象的映射
+		Map<String, Object> userMap = new HashMap<>();
+
+//		存放用戶id与用戶名的映射
+		Map<String, String> userIdNameMap = new HashMap<>();
+		
+//		存放服务id与环境id的映射
+		Map<String, String> serConMap = new HashMap<>();
+
 //		List<HashMap<String, Object>> idObjList = new ArrayList<HashMap<String,Object>>();
 
 		// 底层设备生成 返回一个运行时对象
@@ -228,6 +245,15 @@ public class Relation {
 		String CType4 = "Temperature";
 		String Effect4 = "Assign";
 
+		String ServiceId5 = "S23";
+		String DeviceId5 = findUnderid(panasonic.hashCode());
+		String RutimeDeviceId5 = String.valueOf(panasonic.hashCode());
+		String DName5 = "Panasonic";
+		String CType5 = "Temperature";
+		String Effect5 = "Monitor";
+		
+		
+		
 		Service coolService = new Service();
 		Service coolS = (Service) initService(ServiceId, DeviceId, RutimeDeviceId, DName, CType, Effect, coolService);
 
@@ -242,23 +268,31 @@ public class Relation {
 		Service assService = new Service();
 		Service assS = (Service) initService(ServiceId4, DeviceId4, RutimeDeviceId4, DName4, CType4, Effect4,
 				assService);
+		
+		Service moniService =new Service();
+		Service monisService=(Service) initService(ServiceId5, DeviceId5, RutimeDeviceId5, DName5, CType5, Effect5, moniService);
 
+//		将服务id与运行时设备id绑定
 		SerDevMaps.put(coolS.getServiceId(), coolS.getRutimeDeviceId());
 		SerDevMaps.put(coolS2.getServiceId(), coolS2.getRutimeDeviceId());
 		SerDevMaps.put(upS3.getServiceId(), upS3.getRutimeDeviceId());
 		SerDevMaps.put(assS.getServiceId(), assS.getRutimeDeviceId());
+		SerDevMaps.put(monisService.getServiceId(), monisService.getRutimeDeviceId());
 
+//		将服务id与服务对象绑定
 		serMap.put(coolS.getServiceId(), coolS);
 		serMap.put(coolS2.getServiceId(), coolS2);
 		serMap.put(upS3.getServiceId(), upS3);
 		serMap.put(assS.getServiceId(), assS);
+		serMap.put(monisService.getServiceId(), monisService);
 
 //		Field[] fields = objMaps.get(gree).getClass().getDeclaredFields();
-
+//		服务从设备哪里获得相应的属性值
 		SerMapDev_AirC(ndAirCondition, coolS);
 		SerMapDev_AirC(panasonic, coolS2);
 		SerMapDev_AirC(panasonic, upS3);
 		SerMapDev_AirC(ndAirCondition, assS);
+		SerMapDev_AirC(panasonic, monisService);
 
 		Services services = new Services();
 		services.addlist(SerDevMaps);
@@ -275,12 +309,12 @@ public class Relation {
 //			services.ListProperties(si, serMap);
 //			System.out.println("---------------------------");
 //		}
-
+//		测试设置服务属性值，根据映射设置设备属性值
 		String SerId2 = "S11";
 		String Value2 = "On";
 		String SKey2 = "Status";
 		services.SetDevProperties(SerId2, Value2, SKey2, SerDevMaps, idmaps, idObjmaps, objMaps, serMap);
-
+//		位置生成
 		String lName1 = "bedroom";
 		String lId1 = "L1";
 		Location l1 = new Location();
@@ -288,17 +322,78 @@ public class Relation {
 		String lName2 = "sittingroom";
 		String lId2 = "L2";
 		Location l2 = new Location();
-		l1 = (Location) initLocation(lId1, lName1, SerList, l1);
-		l2 = (Location) initLocation(lId2, lName2, SerList, l2);
+
+		locIdNameMap.put(lName1, lId1);
+		locIdNameMap.put(lName2, lId2);
+
+		l1 = (Location) initLocation(lId1, lName1, l1);
+		l2 = (Location) initLocation(lId2, lName2, l2);
 		locationMap.put(l1.getLId(), l1);
 		locationMap.put(l2.getLId(), l2);
 
 		Locations ls = new Locations();
 		ls.addlist(l1.getLId());
 		ls.addlist(l2.getLId());
-		ls.list();
-		ls.ListProperties(l1.getLId(), locationMap);
-		ls.ListProperties(l2.getLId(), locationMap);
+//		ls.list();
+//		ls.ListProperties(l1.getLId(), locationMap);
+//		ls.ListProperties(l2.getLId(), locationMap);
+
+		String UName1 = "Jack";
+		String UId1 = "U1";
+		String ULName1 = "bedroom";
+		List<String> uclist1 = new ArrayList<>();
+		uclist1.add("C11");
+
+		String UName2 = "Ben";
+		String UId2 = "U2";
+		String ULName2 = "sittingroom";
+		List<String> uclist2 = new ArrayList<>();
+		uclist2.add("C21");
+
+		User u1 = new User();
+		User u2 = new User();
+		u1 = (User) initUser(UName1, ULName1, UId1, u1, locIdNameMap, uclist1);
+		u2 = (User) initUser(UName2, ULName2, UId2, u2, locIdNameMap, uclist2);
+
+		System.out.println(u1.getContextList());
+
+		userMap.put(u1.getUId(), u1);
+		userMap.put(u2.getUId(), u2);
+		userIdNameMap.put(UName1, UId1);
+		userIdNameMap.put(UName2, UId2);
+
+		Users users = new Users();
+		users.addlist(u1.getUId());
+		users.addlist(u2.getUId());
+
+		List<String> UList = users.list();
+//		列出用户的属性
+		for (String uid : UList) {
+			User tempUser = (User) userMap.get(uid);
+			users.ListProperties(tempUser.getUId(), userMap);
+		}
+
+		Context c11 = new Context();
+		Context c21 = new Context();
+
+		String CUName1 = "Jack";
+		String CCType1 = "Temperature";
+		double RMin1 = 20.0;
+		double RMax1 = 30.0;
+		String CID1 = "C11";
+
+		String CUName2 = "Ben";
+		String CCType2 = "Temperature";
+		double RMin2 = 15.0;
+		double RMax2 = 25.0;
+		String CID2 = "C12";
+
+		serConMap.put(CID1,monisService.getServiceId());
+		System.out.println(serConMap);
+		c11 = (Context) initContext(CUName1, CCType1, RMin1, RMax1, CID1, c11, userIdNameMap, userMap,serConMap,serMap);
+		c21 = (Context) initContext(CUName2, CCType2, RMin2, RMax2, CID2, c21, userIdNameMap, userMap,serConMap,serMap);
+
+		System.out.println(c11.getCId() + " " + c11.getCType() + " " + c11.getRMin() + " " + c11.getRMax()+" "+c11.getCValue());
 
 	}
 
@@ -437,44 +532,81 @@ public class Relation {
 	}
 
 // 	初始化位置
-	public static Object initLocation(String LId, String LName, List<String> sList,
-			Object location) {
-		
-		System.out.println(SerDevMaps);
-		System.out.println(idmaps);
-		AirCondition tempA=null;
-		AirCondition tempB=null;
+	public static Object initLocation(String LId, String LName, Object location) {
+
+		AirCondition tempA = null;
+		AirCondition tempB = null;
 //		{null=com.appleyk.Proxy.device.Gree@1b6d3586, null=com.appleyk.Proxy.device.Panasonic@4554617c}
 //		通过底层设备与运行时设备的映射找到底层设备对象underDevice
 		for (Object o : objMaps.keySet()) {
-			tempA=(AirCondition)o;
-			if(tempA.getLName().equals(LName)) {
-				tempB=tempA;
+			tempA = (AirCondition) o;
+			if (tempA.getLName().equals(LName)) {
+				tempB = tempA;
 			}
 		}
-		
-		List<String> DIdList=new ArrayList<>();
-		List<String> SIdList=new ArrayList<>();
-		for(String DId:idmaps.keySet()) {
-			if(tempB.hashCode()==Integer.valueOf(idmaps.get(DId))) {
+
+		List<String> DIdList = new ArrayList<>();
+		List<String> SIdList = new ArrayList<>();
+		for (String DId : idmaps.keySet()) {
+			if (tempB.hashCode() == Integer.valueOf(idmaps.get(DId))) {
 				DIdList.add(DId);
 			}
 		}
-		
-		for(String SId:SerDevMaps.keySet()) {
-			if(tempB.hashCode()==Integer.valueOf(SerDevMaps.get(SId))) {
+
+		for (String SId : SerDevMaps.keySet()) {
+			if (tempB.hashCode() == Integer.valueOf(SerDevMaps.get(SId))) {
 				SIdList.add(SId);
 			}
 		}
-		
+
 		Location tempLocation = (Location) location;
 		tempLocation.setLId(LId);
 
 		tempLocation.setLName(LName);
 		tempLocation.setdList(DIdList);
 		tempLocation.setsList(SIdList);
-		
+
 		return tempLocation;
+
+	}
+
+//	初始化用户
+	public static Object initUser(String UName, String LName, String UId, Object user, Map<String, String> locIdNameMap,
+			List<String> CList) {
+		User u = (User) user;
+		u.setUName(UName);
+		u.setUId(UId);
+		u.setLName(LName);
+		u.setLId(locIdNameMap.get(LName));
+		u.setContextList(CList);
+
+		return u;
+	}
+
+//	初始化环境状态
+	public static Object initContext(String UName, String CType, double RMin, double RMax, String CId, Object context,
+			Map<String, String> userIdNameMap, Map<String, Object> userMap,Map<String, String> serConMap,Map<String, Object> serMap) {
+		Context c = (Context) context;
+		c.setUName(UName);
+		c.setCType(CType);
+		c.setRMin(RMin);
+		c.setRMax(RMax);
+		c.setCId(CId);
+
+		User user = new User();
+		user = (User) userMap.get(userIdNameMap.get(UName));
+
+		c.setLName(user.getLName());
+		c.setLId(user.getLId());
+		
+		if(serConMap.get(CId)!=null) {
+			Service s=(Service)serMap.get(serConMap.get(CId));
+			c.setCValue(s.getSValue());
+		}
+			
+
+		
+		return c;
 
 	}
 
