@@ -39,11 +39,12 @@ public class Services {
 		}
 		System.out.println("ServiceId: " + s.getServiceId());
 		System.out.println("DeviceId: " + s.getDeviceId());
-		System.out.println("RutimeDeviceId: " + s.getRutimeDeviceId());
+//		System.out.println("RutimeDeviceId: " + s.getRutimeDeviceId());
 		System.out.println("DName: " + s.getDName());
-		System.out.println("LName: " + s.getLName());
 		System.out.println("CType: " + s.getCType());
 		System.out.println("Effect: " + s.getEffect());
+		
+		System.out.println("LName: " + s.getLName());
 		System.out.println("Status: " + s.getStatus());
 		System.out.println("SValue: " + s.getSValue());
 
