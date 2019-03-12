@@ -213,17 +213,17 @@ public class Relation {
 			airConditions.addlist(mEntry.getKey());
 		}
 		// 列出运行时的空调对应的底层空调
-		System.out.println("当前设备为：");
-		List<String> airCList = airConditions.list();
+//		System.out.println("当前设备为：");
+//		List<String> airCList = airConditions.list();
 //		根据设备id获得所有设备的属性
-		System.out.println("设备属性列表：");
-		for (String underDeviceId : airCList) {
-			System.out.println("---------------------------");
-			airConditions.ListProperties(underDeviceId, objMaps, idObjmaps, idmaps);
-			
-
-		}
-		System.out.println();
+//		System.out.println("设备属性列表：");
+//		for (String underDeviceId : airCList) {
+//			System.out.println("---------------------------");
+//			airConditions.ListProperties(underDeviceId, objMaps, idObjmaps, idmaps);
+//			
+//
+//		}
+//		System.out.println();
 
 		String ServiceId = "S11";
 		String DName = "Gree";
@@ -308,21 +308,13 @@ public class Relation {
 		System.out.println("当前的服务为：");
 		SerList = services.list();
 
-		String SerId = "S12";
-		String Value = "50";
-		String SKey = "Temperature";
-		services.SetDevProperties(SerId, Value, SKey, SerDevMaps, idmaps, idObjmaps, objMaps, serMap);
-
-		for (String si : SerList) {
-			System.out.println("---------------------------");
-			services.ListProperties(si, serMap);
-		}
+		
 		System.out.println();
 //		测试设置服务属性值，根据映射设置设备属性值
 		String SerId2 = "S11";
 		String Value2 = "On";
 		String SKey2 = "Status";
-		services.SetDevProperties(SerId2, Value2, SKey2, SerDevMaps, idmaps, idObjmaps, objMaps, serMap);
+		services.SetDevProperties(SerId2, Value2, SKey2, SerDevMaps, idmaps, idObjmaps, objMaps, serMap,contMap);
 //		位置生成
 		String lName1 = "bedroom";
 		String lId1 = "L1";
@@ -343,9 +335,9 @@ public class Relation {
 		Locations ls = new Locations();
 		ls.addlist(l1.getLId());
 		ls.addlist(l2.getLId());
-//		ls.list();
-//		ls.ListProperties(l1.getLId(), locationMap);
-//		ls.ListProperties(l2.getLId(), locationMap);
+		ls.list();
+		ls.ListProperties(l1.getLId(), locationMap);
+		ls.ListProperties(l2.getLId(), locationMap);
 
 		String UName1 = "Jack";
 		String UId1 = "U1";
@@ -412,11 +404,32 @@ public class Relation {
 		contexts.addlist(CID2);
 
 		contexts.list();
+		
+		for(String cid:contexts.list()) {
+			System.out.println("------------------");
+			contexts.ListProperties(cid, contMap);
+			
+		}
+		
+//		System.out.println(SerDevMaps);
+//		System.out.println(idmaps);
+		String SerId = "S12";
+		String Value = "50";
+		String SKey = "Temperature";
+		services.SetDevProperties(SerId, Value, SKey, SerDevMaps, idmaps, idObjmaps, objMaps, serMap,contMap);
 
-		contexts.ListProperties(CID1, contMap);
-		System.out.println(SerDevMaps);
-		System.out.println(idmaps);
+//		for (String si : SerList) {
+//			System.out.println("---------------------------");
+//			services.ListProperties(si, serMap);
+//		}
+		services.ListProperties(SerId, serMap);
 
+		for(String cid:contexts.list()) {
+			System.out.println("------------------");
+			contexts.ListProperties(cid, contMap);
+			
+		}
+		
 	}
 
 	/**

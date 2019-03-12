@@ -53,7 +53,7 @@ public class Services {
 	// 对服务进行属性设置从而转化成对设备的设值
 	public void SetDevProperties(String SerId, String Value, String SKey, Map<String, String> SerDevMaps,
 			Map<String, String> idmaps, Map<String, Object> idObjmaps, Map<Object, Object> objMaps,
-			Map<String, Object> SerMap) {
+			Map<String, Object> SerMap,Map<String, Object> contMap) {
 //		获得当前操作服务对象
 		Service currentService = (Service) SerMap.get(SerId);
 //		服务id与运行时设备id的映射:SerDevMaps  {S11=2101973421, S22=685325104, S21=685325104}
@@ -84,6 +84,20 @@ public class Services {
 		if (isNum(Value) && currentService.getEffect().equals("Assign")) {
 			airCon.setT(Double.valueOf(Value.toString()));
 			currentService.setSValue(Double.valueOf(Value.toString()));
+			
+//			System.out.println(contMap);
+//			查找相关环境状态
+			for(String cid:contMap.keySet()) {
+				Context c=new Context();
+				c=(Context)contMap.get(cid);
+				if(c.getLName().equals(currentService.getLName())) {
+					c.setCValue(Double.valueOf(Value.toString()));
+				}
+					
+			}
+			
+			
+			
 			System.out.println("Set Service.SValue and Device.Key Success!");
 			return;
 		} else {
@@ -94,6 +108,7 @@ public class Services {
 			if (SKey.equals("Status")) {
 				airCon.setStatus(Value);
 				currentService.setStatus(Value);
+				
 				System.out.println("Set Service.Status and Device.Status Success!");
 				return;
 			}
