@@ -25,6 +25,8 @@ import com.appleyk.Proxy.virtualObejct.Devices;
 import com.appleyk.Proxy.runtime.Light;
 import com.appleyk.Proxy.runtime.LightImpl;
 
+import com.appleyk.Proxy.relation.*;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.nullValue;
 
@@ -203,8 +205,8 @@ public class Relation {
 		idObjmaps.put(String.valueOf(panasonic.hashCode()), objMaps.get(panasonic));
 		idmaps.put(panasonic.getID(), String.valueOf(panasonic.hashCode()));
 
-		System.out.println("空调名： "+panasonic.getDName());
-		System.out.println("空调当前温度: "+panasonic.getT());
+//		System.out.println("空调名： "+panasonic.getDName());
+//		System.out.println("空调当前温度: "+panasonic.getT());
 		
 		// 运行时空调对象集合，有添加空调的方法addlist和列出运行时空调的方法list
 		Devices airConditions = new Devices();
@@ -335,7 +337,7 @@ public class Relation {
 		Locations ls = new Locations();
 		ls.addlist(l1.getLId());
 		ls.addlist(l2.getLId());
-		ls.list();
+		List<String> LList=ls.list();
 		ls.ListProperties(l1.getLId(), locationMap);
 		ls.ListProperties(l2.getLId(), locationMap);
 
@@ -369,10 +371,13 @@ public class Relation {
 
 		List<String> UList = users.list();
 //		列出用户的属性
-		for (String uid : UList) {
-			User tempUser = (User) userMap.get(uid);
-			users.ListProperties(tempUser.getUId(), userMap);
-		}
+//		for (String uid : UList) {
+//			User tempUser = (User) userMap.get(uid);
+//			users.ListProperties(tempUser.getUId(), userMap);
+//		}
+		
+		LocatedIn.createLocatedIn(UList,LList,userMap,locationMap);
+		
 
 		Context c11 = new Context();
 		Context c21 = new Context();
@@ -390,7 +395,7 @@ public class Relation {
 		String CID2 = "C12";
 
 		serConMap.put(CID1, moniS.getServiceId());
-		System.out.println(serConMap);
+//		System.out.println(serConMap);
 		c11 = (Context) initContext(CUName1, CCType1, RMin1, RMax1, CID1, c11, userIdNameMap, userMap, serConMap,
 				serMap);
 		c21 = (Context) initContext(CUName2, CCType2, RMin2, RMax2, CID2, c21, userIdNameMap, userMap, serConMap,
@@ -403,13 +408,13 @@ public class Relation {
 		contexts.addlist(CID1);
 		contexts.addlist(CID2);
 
-		contexts.list();
-		
-		for(String cid:contexts.list()) {
-			System.out.println("------------------");
-			contexts.ListProperties(cid, contMap);
-			
-		}
+//		contexts.list();
+//		
+//		for(String cid:contexts.list()) {
+//			System.out.println("------------------");
+//			contexts.ListProperties(cid, contMap);
+//			
+//		}
 		
 //		System.out.println(SerDevMaps);
 //		System.out.println(idmaps);
@@ -422,13 +427,13 @@ public class Relation {
 //			System.out.println("---------------------------");
 //			services.ListProperties(si, serMap);
 //		}
-		services.ListProperties(SerId, serMap);
+//		services.ListProperties(SerId, serMap);
 
-		for(String cid:contexts.list()) {
-			System.out.println("------------------");
-			contexts.ListProperties(cid, contMap);
-			
-		}
+//		for(String cid:contexts.list()) {
+//			System.out.println("------------------");
+//			contexts.ListProperties(cid, contMap);
+//			
+//		}
 		
 	}
 
